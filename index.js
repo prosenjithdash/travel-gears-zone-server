@@ -107,7 +107,7 @@ const dbConnect = async () => {
             // filter by category
             //filter by brand
 
-            const { name, sort, category, brand } = req.query
+            const { title, sort, category, brand } = req.query
             
             const query = {}
 
