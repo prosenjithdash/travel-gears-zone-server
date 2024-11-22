@@ -129,7 +129,21 @@ const dbConnect = async () => {
                 .find(query)
                 .sort({ price: sortOption })
                 .toArray();
-            res.json(products);
+            
+            
+            // find how much products have here
+            const totalProducts = await productCollection.countDocuments(query);
+            
+            // find our wanted property
+            const productInfo = await productCollection.find({}, { projection: { category: 1, brand: 1 } }).toArray();
+
+            
+
+           
+            const categories = [...new Set(productInfo.map((p) => p.category))];
+             const brands = [...new Set(productInfo.map((p) => p.brand))];
+
+            res.json({products,brands,categories,totalProducts});
 
 
 
