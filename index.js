@@ -1,7 +1,7 @@
 const express = require("express")
 const cors = require('cors');
 const jwt = require('jsonwebtoken')
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 require('dotenv').config()
 const app = express()
 const port = process.env.PORT || 8000;
@@ -149,13 +149,19 @@ const dbConnect = async () => {
              const brands = [...new Set(products.map((p) => p.brand))];
 
             res.json({products,brands,categories,totalProducts});
-
-
-
-
         });
 
 
+        app.patch('/wishlist/add', async (req, res) => {
+            const { userEmail, productId } = req.body;
+            const result = await userCollection.updateOne(
+                { email: userEmail },
+                { $addToSet: { wishlist: new ObjectId(String(productId)) } }
+            );
+
+
+            res.send(result);
+        })
 
 
     } catch (error) {
